@@ -1,0 +1,7 @@
+git tag //todas las etiquetas y cambios deel proyecto
+git checout -b tags nombre de la etiqueta(realese 2.12.)cambia de rama y crea una copia del tag rtealacionado
+EPSG 3857 =EPSG 900913
+EPSG 4326 (ELIP)
+EPSG 32719
+EPSG 32720
+EPSG 32721
