@@ -1,0 +1,149 @@
+<!DOCTYPE html> 
+2 <html> 
+3 <head> 
+4 	<meta charset="utf-8"> 
+5 	<title>Visor Simple OpenLayers</title> 
+6 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.12/theme/default/style.css" /> 
+7 	<script src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.12/OpenLayers.js"></script> 
+8 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAWGV-uEDtw1I-Oo3jOEaWhd9rTifR_0VE" 
+9   type="text/javascript"></script> 
+10 	<style type="text/css"> 
+11 		html, body { 
+12 			height: 100%; 
+13 			width: 100%; 
+14 			margin: 0; 
+15 		} 
+16 		.cabecera{ 
+17 			height: 50px; 
+18 			background-color: darkblue; 
+19 		} 
+20 		.cabecera h2{ 
+21 			color: #fff; 
+22 			margin-top: 0; 
+23 		} 
+24 		#mapa{ 
+25 			height: 300px; 
+26 			width: 600px; 
+27 			border: solid 3px darkblue; 
+28 		} 
+29 		 
+30 	</style> 
+31 	<script type="text/javascript"> 
+32 		var init = function(){ 
+33  
+34 			var proyeccion = new OpenLayers.Projection("EPSG:900913"); //EPSG:900913 
+35 			var controlNavegacion = new OpenLayers.Control.Navigation(); 
+36 			var controlZoom = new OpenLayers.Control.PanZoomBar(); // Zoom 
+37  
+38 			// Propiedades del objeto Map 
+39 			var propiedades = { 
+40 				projection: proyeccion, 
+41 				units: 'm', 
+42 				controls: [controlNavegacion, controlZoom], 
+43 				numZoomLevels: 21 
+44 			}; 
+45  
+46 			//Creación de una instancia de la clase Map 
+47 			var map = new OpenLayers.Map("mapa", propiedades);	 
+48  
+49 			// Capa OSM 
+50 			var layerOSM = new OpenLayers.Layer.OSM(); 
+51 			map.addLayer(layerOSM); 
+52  
+53 			// Capa Google 
+54 			var layerGoogleSatelital = new OpenLayers.Layer.Google("Google Satelital",{type:google.maps.MapTypeId.SATELLITE}); 
+55 			var layerGoogleHibrido = new OpenLayers.Layer.Google("Google Hidrido",{type:google.maps.MapTypeId.HYBRID}); 
+56 			var layerGoogleTerrain = new OpenLayers.Layer.Google("Google Terrain",{type:google.maps.MapTypeId.TERRAIN}); 
+57  
+58 			map.addLayers([layerGoogleHibrido, layerGoogleSatelital, layerGoogleTerrain]); 
+59 			 
+60  
+61 			// Control de cambio de Capas 
+62 			var controlCapas = new OpenLayers.Control.LayerSwitcher(); 
+63 			map.addControl(controlCapas); 
+64  
+65 			// Control de cursor 
+66 			var controlCursor = new OpenLayers.Control.MousePosition(); 
+67 			map.addControl(controlCursor); 
+68  
+69 			/// Capa consumiendo servicio WMS 
+70 			var nombreWMS = "Límites departamentales"; 
+71 			var urlWMS = "http://geo.gob.bo/geoserver/wms"; 
+72 			var propiedadesWMS = { 
+73 				layers: 'fondos:departamento1', 
+74 				transparent: true 
+75 			}; 
+76  
+77 			var layerDepartamentosWMS = new OpenLayers.Layer.WMS(nombreWMS, urlWMS, propiedadesWMS); 
+78 			layerDepartamentosWMS.setVisibility(false); 
+79 			map.addLayer(layerDepartamentosWMS); 
+80  
+81 			// Layer WMS desde geoserver Local 
+82 			var layerEolico = new OpenLayers.Layer.WMS( 
+83 				"Mapa Eólico", 
+84 				"http://192.168.56.101:8080/geoserver/wms", 
+85 				{ 
+86 					layers: 'curso-gis:EOLICO', 
+87 					transparent: true 
+88 				} 
+89 			); 
+90 			map.addLayer(layerEolico); 
+91 			layerEolico.setVisibility(false); 
+92  
+93 			// Capa Presas 2010   
+94 			var layerPresas = new OpenLayers.Layer.WMS( 
+95 				"Mapa de Represas", 
+96 				"http://192.168.56.101:8080/geoserver/wms", 
+97 				{ 
+98 					layers: 'curso-gis:Presas2010', 
+99 					transparent: true 
+100 				} 
+101 			); 
+102 			map.addLayer(layerPresas); 
+103 			layerPresas.setVisibility(false); 
+104  
+105 			var layerJson = new OpenLayers.Layer.Vector( 
+106 				"Capa Uyuni-json", 
+107 				{ 
+108 					projection: new OpenLayers.Projection("EPSG:4326"), 
+109 					strategies: [new OpenLayers.Strategy.Fixed()], 
+110  
+111 					protocol: new OpenLayers.Protocol.HTTP({ 
+112 						url: './salar_uyuni.json', 
+113 						format: new OpenLayers.Format.GeoJSON() 
+114 					}) 
+115 				} 
+116 			); 
+117 			map.addLayer(layerJson); 
+118 			layerJson.setVisibility(false); 
+119 			// Configuración para mostrar la región de Bolivia 
+120 			// Lon: -64.819336, Lat: -17.379999 
+121 			var LonLat = new OpenLayers.LonLat(-64.819336, -17.379999); 
+122 			var zoom = 5; 
+123 			var LonLatTransformado = LonLat.transform( 
+124 				new OpenLayers.Projection("EPSG:4326"), 
+125 				map.getProjection() // new OpenLayers.Projection("EPSG:900913") 
+126 			); 
+127 			map.setCenter(LonLatTransformado, zoom); 
+128  
+129 		} 
+130 		// Cargamos la función init, para desplegar el mapa 
+131 		window.onload = init; 
+132 	</script> 
+133 </head> 
+134 <body> 
+135 	<div class="cabecera"> 
+136 		<h2>Visor Simple OpenLayers</h2> 
+137 	</div> 
+138 	<div id="mapa"></div> 
+139 	 
+140 
+ 
+141 	<hr> 
+142 	<form action="upload.php" method="post" enctype="multipart/form-data"> 
+143     Seleccione los archivos a subir: 
+144     <input type="file" name="myFile[]" multiple id="myFile"> 
+145     <input type="submit" value="Upload File" name="submit"> 
+146 </form> 
+147 </body> 
+148 </html> 
