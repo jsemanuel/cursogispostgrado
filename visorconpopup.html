@@ -34,8 +34,8 @@
 			var proyeccion = new OpenLayers.Projection("EPSG:900913"); //EPSG:900913
 			var controlNavegacion = new OpenLayers.Control.Navigation();
 			var controlZoom = new OpenLayers.Control.PanZoomBar(); // Zoom
-			var host = "http://172.16.2.126";
-			OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi ?url=";
+			var host = "http://192.168.43.69";
+			OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url=";
 
 			// Propiedades del objeto Map
 			var propiedades = {
@@ -135,8 +135,18 @@
 				queryVisible: true,
 				eventListeners: {
 					getfeatureinfo: function (event){
-						var info = document.getElementById("informacion");
-						info.innerHTML = event.text;
+						var popup = new OpenLayers.Popup.FramedCloud(
+							'Popup',
+							map.getLonLatFromPixel(event.xy),
+							null,
+							event.text,
+							null,
+							true
+						);
+						map.addPopup(popup);
+
+						//var info = document.getElementById("informacion");
+						//info.innerHTML = event.text;
 					}
 				}
 			});
