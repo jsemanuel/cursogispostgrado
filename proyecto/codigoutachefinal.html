@@ -8,8 +8,9 @@
 	</script>
 </head>
 <body>
-<h1>MAPA INTERACTIVO</h1>
-<div id="mapa" style="width:700px; height:500px;">
+<h1>
+<font color="white" size="2" face="roman">DONDE ESTA USTED RESPECTO DE LA CARRERA DE INFORMATICA DE LA UMSA</font></h1>
+<div id="mapa" style="width:600px; height:400px;">
 	--NUESTRO MAPA--
 </div>
 <script type="text/javascript">
@@ -48,7 +49,7 @@ function fn_ok(rta)
 		var gMarkerDV=new google.maps.Marker(config)
 	//	gMarkerDV.setIcon('logo_umsa.png')
 	var objHTML ={
-		content:'<div style="height:150 px; whidt:300px"><h2>LA MEJOR CARRERA DE LA UMSA</h2></div>'
+		content:'<div style="height:150 px; whidt:300px"><h1>"Carrera de Informàtica"</h1><h2>LA MEJOR CARRERA DE LA UMSA</h2></div>'
 	}
 	var gIW = new google.maps.InfoWindow(objHTML);
 	google.maps.event.addListener(gMarkerDV,'click',function(){gIW.open(gMapa,gMarkerDV);});
