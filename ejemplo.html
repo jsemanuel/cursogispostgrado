@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Mapa simple de OpenStreetMap con la API 3 de Google Maps</title>
+<style>
+html, body, #map {height:100%;width:100%;margin:0;padding:0;}
+</style> 
+</head>
+<body>	
+<h1>Mapa simple de OpenStreetMap con la API 3 de Google Maps</h1>
+<div id="map"></div>        
+<div id="footer">&copy; <a href="http://www.openstreetmap.org/copyright" rel="nofollow">OpenStreetMap</a> contributors</div>
+<script src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+            var element = document.getElementById("map"); 
+            var map = new google.maps.Map(element, {
+                center: new google.maps.LatLng(-16.5037538,-68.1295871),
+                zoom: 90,
+                mapTypeId: "OSM",
+                mapTypeControl: true,
+                streetViewControl: true}); 
+            map.mapTypes.set("OSM", new google.maps.ImageMapType({
+                getTileUrl: function(coord, zoom) {
+                    var tilesPerGlobe = 1 << zoom;
+                    var x = coord.x % tilesPerGlobe;
+                    if (x < 0) {
+                        x = tilesPerGlobe+x;}
+                    return "http://tile.openstreetmap.org/" + zoom + "/" + x + "/" + coord.y + ".png";
+                },
+                tileSize: new google.maps.Size(256, 256),
+                name: "OpenStreetMap",
+                maxZoom: 18
+            }));
+</script>
+</body>
+</html>
