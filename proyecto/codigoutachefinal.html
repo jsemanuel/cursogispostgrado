@@ -62,9 +62,10 @@ function fn_ok(rta)
 	 var objConfigDS={
 	 	origin: gLatLon, // lat-long string domicilio
 	 	destination: objInformacion.address,
-	 	travelMode:google.maps.TravelMode.TRANSIT
+	 	travelMode:google.maps.TravelMode.WALKING
 	 	//DRIVING conduciendo vehiculo
 	 	//TRANSIT en transporte publico
+	 	//WALKING caminando
 
 	 }
 	var ds = new google.maps.DirectionsService();//obtener  coordenada
