@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1>
-<font color="white" size="2" face="roman">DONDE ESTA USTED RESPECTO DE LA CARRERA DE INFORMATICA DE LA UMSA</font></h1>
+<font color="white" size="1" face="roman">USTED PUEDE LLEGAR A LA CARRERA DE INFORMATICA DE LA UMSA SIGUIENDO LA SIGUIENTE RUTA SI ESTA MANEJANDO UN VEHICULO</font></h1>
 <div id="mapa" style="width:600px; height:400px;">
 	--NUESTRO MAPA--
 </div>
@@ -62,7 +62,9 @@ function fn_ok(rta)
 	 var objConfigDS={
 	 	origin: gLatLon, // lat-long string domicilio
 	 	destination: objInformacion.address,
-	 	travelMode:google.maps.TravelMode.DRIVING
+	 	travelMode:google.maps.TravelMode.TRANSIT
+	 	//DRIVING conduciendo vehiculo
+	 	//TRANSIT en transporte publico
 
 	 }
 	var ds = new google.maps.DirectionsService();//obtener  coordenada
