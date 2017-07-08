@@ -24,7 +24,7 @@ function fn_ok(rta)
 	var lon = rta.coords.longitude;
 	var gLatLon = new google.maps.LatLng(lat,lon);
 	var objConfig = {
-		zoom:7,
+		zoom:15,
 		center:gLatLon
 	}
 	var gMapa = new google.maps.Map(divMapa,objConfig);
@@ -53,6 +53,29 @@ function fn_ok(rta)
 	}
 	var gIW = new google.maps.InfoWindow(objHTML);
 	google.maps.event.addListener(gMarkerDV,'click',function(){gIW.open(gMapa,gMarkerDV);});
+	}
+
+	var objConfigDR={
+		map:gMapa
+	}
+
+	 var objConfigDS={
+	 	origin: gLatLon, // lat-long string domicilio
+	 	destination: objInformacion.address,
+	 	travelMode:google.maps.TravelMode.DRIVING
+
+	 }
+	var ds = new google.maps.DirectionsService();//obtener  coordenada
+	var dr = new google.maps.DirectionsRenderer(objConfigDR);//traduce coordenadas a la ruta visible
+	ds.route(objConfigDS, fnRutear);
+
+	function fnRutear(resultados,status){
+		//89mostrar la linea entre A y B
+		if(status= 'OK')
+			{ dr.setDirections(resultados);}
+		else
+			{alert('Error'+status);}
+
 	}
 }
 </script>
